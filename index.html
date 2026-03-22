@@ -1,0 +1,867 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CYPnosis — Complex Interaction Results</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --surface: #ffffff;
+      --surface-alt: #f8fafc;
+      --text: #0f172a;
+      --muted: #475569;
+      --line: #dbe2ea;
+      --line-strong: #c8d3df;
+      --shadow: 0 2px 6px rgba(15, 23, 42, 0.06), 0 14px 32px rgba(15, 23, 42, 0.08);
+
+      --critical-50: #fef2f2;
+      --critical-100: #fee2e2;
+      --critical-200: #fecaca;
+      --critical-500: #ef4444;
+      --critical-600: #dc2626;
+      --critical-700: #b91c1c;
+
+      --high-100: #ffedd5;
+      --high-600: #ea580c;
+
+      --moderate-100: #fef9c3;
+      --moderate-700: #a16207;
+
+      --good-100: #dcfce7;
+      --good-700: #15803d;
+
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+
+      --sidebar-width: 300px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.4;
+    }
+
+    .app {
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: var(--sidebar-width) 1fr;
+      gap: 18px;
+    }
+
+    .sidebar {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      height: fit-content;
+      position: sticky;
+      top: 18px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, #fda4af, #ef4444);
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.85);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 750;
+      letter-spacing: 0.1px;
+    }
+
+    .sub {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 12.5px;
+    }
+
+    .sidebar-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      color: #334155;
+      font-size: 12px;
+      padding: 9px 10px;
+      border-radius: 10px;
+      font-weight: 600;
+      text-align: center;
+      cursor: default;
+    }
+
+    .sidebar-card {
+      background: var(--surface-alt);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .sidebar-card h3 {
+      margin: 0 0 8px;
+      font-size: 12px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #1f2937;
+      padding: 6px 0;
+      border-top: 1px dashed #e3e8ee;
+    }
+
+    .row:first-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      color: #475569;
+      padding: 2px 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .run {
+      margin-top: 12px;
+      width: 100%;
+      border: 1px solid var(--critical-200);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #fff5f5 0%, #fff1f2 100%);
+      color: var(--critical-700);
+      font-weight: 750;
+      padding: 11px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .status-strip {
+      padding: 12px 16px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 10px;
+      align-items: center;
+    }
+
+    .status-item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface-alt);
+      padding: 8px 10px;
+    }
+
+    .status-item small {
+      display: block;
+      color: #64748b;
+      font-size: 11px;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+
+    .status-item strong {
+      font-size: 13px;
+      color: #0f172a;
+    }
+
+    .header {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border: 1px solid var(--critical-200);
+      background: linear-gradient(180deg, #fff 0%, #fff8f8 100%);
+    }
+
+    .header-row-1 {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1.2fr;
+      gap: 12px;
+    }
+
+    .signal-block {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #fff;
+      min-height: 124px;
+    }
+
+    .critical-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 11px;
+      background: var(--critical-600);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      margin-bottom: 9px;
+    }
+
+    .decision-title {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--critical-700);
+    }
+
+    .decision-sub {
+      margin: 6px 0 0;
+      color: #7f1d1d;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .metric-value {
+      margin: 0;
+      font-size: 52px;
+      font-weight: 820;
+      line-height: 1;
+      color: var(--critical-600);
+      letter-spacing: -1px;
+    }
+
+    .metric-line {
+      margin: 6px 0 0;
+      color: #475569;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .driver-kicker {
+      margin: 0;
+      text-transform: uppercase;
+      color: #64748b;
+      letter-spacing: 0.08em;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .driver-title {
+      margin: 6px 0 4px;
+      font-size: 20px;
+      color: #111827;
+      line-height: 1.2;
+      font-weight: 760;
+    }
+
+    .driver-list {
+      margin: 0;
+      font-size: 14px;
+      color: #1f2937;
+      font-weight: 600;
+    }
+
+    .driver-foot {
+      margin: 6px 0 0;
+      color: #475569;
+      font-size: 13px;
+    }
+
+    .header-row-2 {
+      border-radius: 12px;
+      border: 1px solid var(--critical-200);
+      background: var(--critical-50);
+      padding: 12px 14px;
+      color: #7f1d1d;
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .header-row-3 {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 12px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 17px;
+      color: #0f172a;
+    }
+
+    .mini-note {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .dose-grid {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .dose-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1.8fr;
+      padding: 10px 12px;
+      background: #fff;
+      border-top: 1px solid #edf2f7;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dose-row:first-child { border-top: none; }
+
+    .dose-row strong {
+      font-size: 14px;
+      color: #0f172a;
+    }
+
+    .dose-row span {
+      font-size: 14px;
+      color: #334155;
+      font-weight: 600;
+    }
+
+    .dose-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      gap: 10px;
+    }
+
+    .dose-footer p {
+      margin: 0;
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    .sim-btn {
+      border: 1px solid var(--critical-200);
+      background: #fff;
+      color: var(--critical-700);
+      border-radius: 10px;
+      padding: 8px 11px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .header-row-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(160px, 1fr));
+      gap: 10px;
+    }
+
+    .burden-tile {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 11px;
+    }
+
+    .burden-tile .label {
+      margin: 0;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #64748b;
+      font-weight: 700;
+    }
+
+    .burden-tile .value {
+      margin: 5px 0 0;
+      font-size: 18px;
+      font-weight: 760;
+      color: #111827;
+    }
+
+    .burden-tile.critical {
+      border-color: var(--critical-200);
+      background: linear-gradient(180deg, #fff, #fff8f8);
+    }
+
+    .burden-tile.critical .value { color: var(--critical-700); }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 14px;
+    }
+
+    .block {
+      padding: 14px;
+    }
+
+    .block h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+
+    .exp-row {
+      display: grid;
+      grid-template-columns: 145px 1fr 88px;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 9px;
+    }
+
+    .exp-row:last-child { margin-bottom: 0; }
+
+    .exp-name {
+      font-size: 13px;
+      font-weight: 650;
+      color: #1f2937;
+    }
+
+    .bar-track {
+      height: 13px;
+      background: #e9eef5;
+      border-radius: 999px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #d9e2ec;
+    }
+
+    .bar-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 50%;
+      background: linear-gradient(90deg, #fda4af 0%, #f87171 45%, #ef4444 100%);
+      border-radius: 999px;
+    }
+
+    .bar-fill.minimal { background: #94a3b8; }
+    .bar-fill.moderate { background: linear-gradient(90deg, #fdba74, #fb923c); }
+    .bar-fill.severe { background: linear-gradient(90deg, #fb7185, #dc2626); }
+
+    .exp-val {
+      text-align: right;
+      font-size: 13px;
+      color: #0f172a;
+      font-weight: 760;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+    }
+
+    .drug-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px;
+    }
+
+    .drug-card.severe { border-color: #fecaca; }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 7px;
+    }
+
+    .card-head h4 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .tag {
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      padding: 3px 9px;
+      border: 1px solid var(--line);
+      color: #475569;
+      background: #f8fafc;
+    }
+
+    .tag.severe {
+      color: var(--critical-700);
+      background: var(--critical-50);
+      border-color: var(--critical-200);
+    }
+
+    .tag.moderate {
+      color: var(--moderate-700);
+      background: var(--moderate-100);
+      border-color: #fde68a;
+    }
+
+    .kvs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 12px;
+      font-size: 13px;
+    }
+
+    .kvs p {
+      margin: 0;
+      color: #1f2937;
+    }
+
+    .kvs p span {
+      color: #64748b;
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 2px;
+      font-weight: 700;
+    }
+
+    .modules {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .module {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px;
+    }
+
+    .module h5 {
+      margin: 0;
+      font-size: 14px;
+      color: #0f172a;
+    }
+
+    .module .score {
+      margin: 6px 0;
+      font-size: 26px;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    .module.critical {
+      border-color: var(--critical-200);
+      background: linear-gradient(180deg, #fff, #fff7f7);
+    }
+
+    .module.critical .score { color: var(--critical-700); }
+
+    .notes {
+      margin: 0;
+      padding-left: 17px;
+      color: #334155;
+      font-size: 12.5px;
+    }
+
+    footer {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface-alt);
+      color: #334155;
+      padding: 12px 14px;
+      font-size: 12.5px;
+    }
+
+    @media (max-width: 1280px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .header-row-1,
+      .content-grid,
+      .header-row-4 { grid-template-columns: 1fr; }
+      .status-strip { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <h1>CYPnosis</h1>
+      </div>
+      <p class="sub">Mechanistic PK/PD Modeling Engine</p>
+
+      <div class="sidebar-actions">
+        <div class="btn">Save Preset</div>
+        <div class="btn">Clear Regimen</div>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Configuration</h3>
+        <div class="row"><span>Genotype Modifier</span><span class="pill">OFF</span></div>
+        <div class="row"><span>Patient Context</span><span class="pill">Standard Adult</span></div>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Current Regimen (6)</h3>
+        <div class="row"><span>Bupropion</span><strong>149.9 mg</strong></div>
+        <div class="row"><span>Paroxetine</span><strong>24.8 mg</strong></div>
+        <div class="row"><span>Risperidone</span><strong>2.8 mg</strong></div>
+        <div class="row"><span>Paliperidone</span><strong>—</strong></div>
+        <div class="row"><span>Amitriptyline</span><strong>24.8 mg</strong></div>
+        <div class="row"><span>Nortriptyline</span><strong>—</strong></div>
+      </div>
+
+      <button class="run">Run Analysis <span>(6 medications)</span></button>
+    </aside>
+
+    <main class="main">
+      <section class="panel status-strip">
+        <div class="status-item"><small>Monte Carlo</small><strong>OFF</strong></div>
+        <div class="status-item"><small>Run Status</small><strong>Simulation Complete</strong></div>
+        <div class="status-item"><small>Engine Version</small><strong>v4.2.1-mech</strong></div>
+        <div class="status-item"><small>Compound Library</small><strong>1,284 compounds</strong></div>
+      </section>
+
+      <section class="panel header">
+        <div class="header-row-1">
+          <div class="signal-block">
+            <div class="critical-pill">CRITICAL</div>
+            <p class="decision-title">Critical interaction</p>
+            <p class="decision-sub">Severe exposure amplification</p>
+          </div>
+
+          <div class="signal-block">
+            <p class="metric-value">+232%</p>
+            <p class="metric-line">332% of baseline</p>
+            <p class="metric-line">AUCR 3.32×</p>
+          </div>
+
+          <div class="signal-block">
+            <p class="driver-kicker">Primary driver</p>
+            <p class="driver-title">Stacked CYP2D6 inhibition</p>
+            <p class="driver-list">Bupropion + Paroxetine + Amitriptyline</p>
+            <p class="driver-foot">Multi-drug pathway convergence</p>
+          </div>
+        </div>
+
+        <div class="header-row-2">
+          Critical exposure amplification due to stacked CYP2D6 inhibition across multiple agents. Dose reduction or regimen restructuring should be considered.
+        </div>
+
+        <div class="header-row-3">
+          <div class="section-head">
+            <h2>Dose Adjustment Considerations</h2>
+            <span class="mini-note">Multiple affected victim drugs detected</span>
+          </div>
+          <div class="dose-grid">
+            <div class="dose-row">
+              <strong>Paroxetine</strong>
+              <span>24.8 mg → ≈ 38.8 mg equivalent</span>
+            </div>
+            <div class="dose-row">
+              <strong>Risperidone</strong>
+              <span>2.8 mg → ≈ 9.3 mg equivalent</span>
+            </div>
+            <div class="dose-row">
+              <strong>Amitriptyline</strong>
+              <span>24.8 mg → ≈ 41.3 mg equivalent</span>
+            </div>
+          </div>
+          <div class="dose-footer">
+            <p>Exposure-equivalent estimates; not prescribing directives.</p>
+            <button class="sim-btn">Open dose simulator</button>
+          </div>
+        </div>
+
+        <div class="header-row-4">
+          <article class="burden-tile">
+            <p class="label">Interaction Complexity Index</p>
+            <p class="value">Moderate</p>
+          </article>
+          <article class="burden-tile critical">
+            <p class="label">STRiC</p>
+            <p class="value">Critical</p>
+          </article>
+          <article class="burden-tile critical">
+            <p class="label">QT Prolongation Potential</p>
+            <p class="value">Critical</p>
+          </article>
+          <article class="burden-tile">
+            <p class="label">Anticholinergic Load</p>
+            <p class="value">High</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <div class="panel block">
+          <h3>Medication-Level Exposure Shifts</h3>
+          <div class="exp-row">
+            <div class="exp-name">Bupropion</div>
+            <div class="bar-track"><div class="bar-fill minimal" style="width:50%"></div></div>
+            <div class="exp-val">100%</div>
+          </div>
+          <div class="exp-row">
+            <div class="exp-name">Paroxetine</div>
+            <div class="bar-track"><div class="bar-fill moderate" style="width:78.5%"></div></div>
+            <div class="exp-val">157%</div>
+          </div>
+          <div class="exp-row">
+            <div class="exp-name">Risperidone</div>
+            <div class="bar-track"><div class="bar-fill severe" style="width:100%"></div></div>
+            <div class="exp-val">332% (capped)</div>
+          </div>
+          <div class="exp-row">
+            <div class="exp-name">Paliperidone</div>
+            <div class="bar-track"><div class="bar-fill minimal" style="width:50%"></div></div>
+            <div class="exp-val">100%</div>
+          </div>
+          <div class="exp-row">
+            <div class="exp-name">Amitriptyline</div>
+            <div class="bar-track"><div class="bar-fill moderate" style="width:83.5%"></div></div>
+            <div class="exp-val">167%</div>
+          </div>
+          <div class="exp-row">
+            <div class="exp-name">Nortriptyline</div>
+            <div class="bar-track"><div class="bar-fill severe" style="width:100%"></div></div>
+            <div class="exp-val">285% (capped)</div>
+          </div>
+        </div>
+
+        <div class="panel block">
+          <h3>Drug Detail Cards</h3>
+          <div class="cards">
+            <article class="drug-card severe">
+              <div class="card-head">
+                <h4>Risperidone</h4>
+                <span class="tag severe">SEVERE</span>
+              </div>
+              <div class="kvs">
+                <p><span>Exposure</span>332%</p>
+                <p><span>Equivalent</span>≈ 9.3 mg</p>
+                <p><span>Mechanism</span>CYP2D6 inhibition (stacked)</p>
+                <p><span>Management</span>Alternative agent may be warranted</p>
+              </div>
+            </article>
+
+            <article class="drug-card">
+              <div class="card-head">
+                <h4>Amitriptyline</h4>
+                <span class="tag moderate">MODERATE</span>
+              </div>
+              <div class="kvs">
+                <p><span>Exposure</span>167%</p>
+                <p><span>Equivalent</span>≈ 41.3 mg</p>
+                <p><span>Mechanism</span>Amplified via CYP2D6 inhibitory stack with pathway competition</p>
+                <p><span>Management</span>Assess tolerability and consider dose moderation</p>
+              </div>
+            </article>
+
+            <article class="drug-card severe">
+              <div class="card-head">
+                <h4>Nortriptyline</h4>
+                <span class="tag severe">SEVERE</span>
+              </div>
+              <div class="kvs">
+                <p><span>Exposure</span>285%</p>
+                <p><span>Equivalent</span>High exposure-equivalent burden</p>
+                <p><span>Mechanism</span>High CYP2D6 dependence under stacked inhibition conditions</p>
+                <p><span>Management</span>Review necessity and monitor closely if continued</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel block">
+        <h3>System Module Previews</h3>
+        <div class="modules">
+          <article class="module">
+            <h5>Interaction Complexity Index</h5>
+            <p class="score">30 <span style="font-size:14px;font-weight:700;color:#a16207;">Moderate</span></p>
+            <ul class="notes">
+              <li>Stacking depth: 3</li>
+              <li>High-fm victims present</li>
+            </ul>
+          </article>
+
+          <article class="module critical">
+            <h5>STRiC</h5>
+            <p class="score">83 <span style="font-size:14px;font-weight:700;color:#b91c1c;">CRITICAL</span></p>
+            <ul class="notes">
+              <li>Contributors: Risperidone, Nortriptyline, stacked CYP2D6 inhibition</li>
+            </ul>
+          </article>
+
+          <article class="module critical">
+            <h5>QT Prolongation Potential</h5>
+            <p class="score">CRITICAL</p>
+            <ul class="notes">
+              <li>Contributors: Risperidone, Amitriptyline, Nortriptyline, Paroxetine</li>
+            </ul>
+          </article>
+
+          <article class="module">
+            <h5>Anticholinergic Load</h5>
+            <p class="score">7 <span style="font-size:14px;font-weight:700;color:#ea580c;">High</span></p>
+            <ul class="notes">
+              <li>Contributors: Amitriptyline, Nortriptyline, Paroxetine</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <footer>
+        CYPnosis provides mechanism-based pharmacokinetic and pharmacodynamic modeling derived from regulatory labeling and peer-reviewed literature. Outputs represent exposure-equivalent estimates and pharmacologic burden indices. They are intended to inform, not replace, clinical judgment.
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
