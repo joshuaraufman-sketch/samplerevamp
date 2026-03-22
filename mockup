@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CYPnosis — Decision-First Results Mockup</title>
+  <style>
+    :root {
+      --bg: #f3f5f8;
+      --panel: #ffffff;
+      --panel-2: #f8fafc;
+      --text: #0f172a;
+      --muted: #475569;
+      --line: #dbe3ec;
+      --line-strong: #c9d4e2;
+      --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 20px rgba(16, 24, 40, 0.06);
+
+      --amber-50: #fffbeb;
+      --amber-100: #fef3c7;
+      --amber-200: #fde68a;
+      --amber-300: #fcd34d;
+      --amber-400: #fbbf24;
+      --amber-500: #f59e0b;
+      --amber-700: #b45309;
+
+      --green-100: #dcfce7;
+      --green-700: #15803d;
+
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 18px;
+
+      --sidebar-width: 320px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      line-height: 1.35;
+    }
+
+    .app {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: var(--sidebar-width) 1fr;
+      gap: 18px;
+    }
+
+    .sidebar {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      height: fit-content;
+      position: sticky;
+      top: 18px;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .logo-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      border: 1px solid var(--amber-300);
+      background: var(--amber-100);
+      box-shadow: inset 0 0 0 2px #fff;
+    }
+
+    .logo-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.1px;
+    }
+
+    .engine-chip {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      color: #1e293b;
+      padding: 9px 10px;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      text-align: center;
+    }
+
+    .btn.primary {
+      background: linear-gradient(180deg, #fff 0%, #fffdf6 100%);
+      border-color: var(--amber-300);
+      color: #7c2d12;
+    }
+
+    .sidebar-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .sidebar-card h4 {
+      margin: 0 0 10px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      font-weight: 700;
+    }
+
+    .field-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      font-size: 13px;
+      color: #1f2937;
+      border-top: 1px dashed #e6edf4;
+    }
+
+    .field-row:first-of-type {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .state-pill {
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 999px;
+      padding: 2px 9px;
+      font-size: 11px;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    .run-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      background: #fffaf0;
+      border: 1px solid var(--amber-300);
+      color: #7c2d12;
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-weight: 700;
+      margin: 12px 0 8px;
+    }
+
+    .collapsed-row {
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 12px;
+      color: #475569;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .status-strip {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow);
+      padding: 10px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 18px;
+      font-size: 12px;
+      color: #475569;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #cbd5e1;
+    }
+
+    .dot.green {
+      background: #22c55e;
+    }
+
+    .settings-icon {
+      margin-left: auto;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid var(--line-strong);
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .decision-header {
+      border: 1px solid #f2dfb2;
+      background: #fff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .header-top {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1.05fr 1fr 1.1fr;
+      margin-bottom: 12px;
+    }
+
+    .block {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+
+    .block.moderate {
+      border-color: #f5d79a;
+      background: linear-gradient(180deg, #fff 0%, #fffcf5 100%);
+    }
+
+    .severity-pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--amber-300);
+      background: var(--amber-100);
+      color: var(--amber-700);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .kicker {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .headline {
+      font-size: 22px;
+      line-height: 1.2;
+      margin: 0;
+      font-weight: 750;
+      color: #111827;
+    }
+
+    .subline {
+      font-size: 13px;
+      color: #475569;
+      margin-top: 5px;
+    }
+
+    .plus-metric {
+      font-size: 54px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin: 2px 0 6px;
+      font-weight: 820;
+      color: #9a3412;
+    }
+
+    .metric-detail {
+      font-size: 14px;
+      color: #334155;
+      margin: 4px 0;
+      font-weight: 600;
+    }
+
+    .interpretation {
+      border: 1px solid var(--line);
+      background: #fffcf6;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      color: #334155;
+      font-size: 14px;
+    }
+
+    .adjustment {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .adjustment h3 {
+      margin: 0;
+      font-size: 17px;
+      color: #111827;
+    }
+
+    .dose-line {
+      margin-top: 6px;
+      font-size: 19px;
+      font-weight: 740;
+      color: #1f2937;
+    }
+
+    .helper {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 6px;
+    }
+
+    .small-note {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .secondary-btn {
+      border: 1px solid var(--line-strong);
+      background: #f8fafc;
+      color: #334155;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .metric-pill {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 11px;
+      min-height: 68px;
+    }
+
+    .metric-pill .label {
+      font-size: 11px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .metric-pill .value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .metric-pill .value.moderate {
+      color: #9a3412;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 12px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      color: #0f172a;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 110px 1fr 58px;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: #334155;
+    }
+
+    .bar-track {
+      background: #eef2f7;
+      border: 1px solid #dde5ef;
+      border-radius: 999px;
+      height: 14px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: #94a3b8;
+      border-right: 1px solid #64748b;
+    }
+
+    .bar-fill.amber {
+      background: var(--amber-300);
+      border-right-color: var(--amber-500);
+    }
+
+    .impact-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .impact-item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .impact-item.highlight {
+      border-color: #f1cd81;
+      background: #fffaf0;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      background: #eef2f7;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 8px;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .score {
+      font-size: 30px;
+      font-weight: 780;
+      color: #0f172a;
+      line-height: 1;
+      margin: 6px 0 8px;
+    }
+
+    .tier {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--line-strong);
+      background: #f8fafc;
+      color: #334155;
+    }
+
+    .tier.moderate {
+      border-color: var(--amber-300);
+      background: var(--amber-100);
+      color: #92400e;
+    }
+
+    .tier.minimal,
+    .tier.mild {
+      border-color: #b6e2c1;
+      background: #ecfdf3;
+      color: var(--green-700);
+    }
+
+    .mechanism-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 13px;
+      color: #334155;
+    }
+
+    .mechanism-table th,
+    .mechanism-table td {
+      text-align: left;
+      border-top: 1px solid #e8eef5;
+      padding: 8px 4px;
+    }
+
+    .mechanism-table th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #64748b;
+      font-weight: 700;
+    }
+
+    .footer-note {
+      margin-top: 2px;
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      border-radius: var(--radius-md);
+      padding: 13px 14px;
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    @media (max-width: 1180px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        top: 0;
+      }
+
+      .header-top,
+      .content-grid,
+      .panel-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .app {
+        padding: 10px;
+      }
+
+      .metrics-row {
+        grid-template-columns: 1fr;
+      }
+
+      .plus-metric {
+        font-size: 46px;
+      }
+
+      .bar-row {
+        grid-template-columns: 95px 1fr 46px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="Analysis controls">
+      <div class="logo-row">
+        <div class="logo-dot" aria-hidden="true"></div>
+        <div>
+          <div class="logo-title">CYPnosis</div>
+        </div>
+      </div>
+
+      <div class="engine-chip">Mechanistic PK/PD Modeling Engine</div>
+
+      <div class="button-row">
+        <button class="btn">Save Preset</button>
+        <button class="btn">Clear Regimen</button>
+      </div>
+
+      <section class="sidebar-card">
+        <h4>Genotype Modifier</h4>
+        <div class="field-row">
+          <span>Status</span>
+          <span class="state-pill">OFF</span>
+        </div>
+      </section>
+
+      <section class="sidebar-card">
+        <h4>Patient Context</h4>
+        <div class="field-row">
+          <span>Smoking Status</span>
+          <span class="state-pill">OFF</span>
+        </div>
+        <div class="field-row">
+          <span>Hepatic Impairment</span>
+          <span>None</span>
+        </div>
+        <div class="field-row">
+          <span>Renal Function</span>
+          <span>None</span>
+        </div>
+      </section>
+
+      <button class="run-btn">
+        <span>Run Analysis</span>
+        <span>2 Medications</span>
+      </button>
+
+      <div class="collapsed-row">
+        <span>Scope Limitations</span>
+        <span>▾</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="status-strip" aria-label="Engine status">
+        <span class="status-badge"><span class="dot"></span> Monte Carlo: OFF</span>
+        <span class="status-badge"><span class="dot green"></span> Simulation Complete</span>
+        <span>Engine v4.2.1</span>
+        <span>Compound Library: 3,182</span>
+        <span class="settings-icon" aria-label="Settings">⚙</span>
+      </section>
+
+      <section class="decision-header" aria-label="Clinical Decision Header">
+        <div class="header-top">
+          <article class="block moderate">
+            <div class="severity-pill">Moderate</div>
+            <p class="headline">Moderate interaction</p>
+            <div class="subline">Exposure increased</div>
+          </article>
+
+          <article class="block moderate">
+            <div class="kicker">What happened?</div>
+            <div class="plus-metric">+48%</div>
+            <div class="metric-detail">148% of baseline</div>
+            <div class="small-note">AUCR 1.48×</div>
+          </article>
+
+          <article class="block moderate">
+            <div class="kicker">Why did it happen?</div>
+            <div class="metric-detail" style="font-size: 20px; color: #111827; font-weight: 760;">CYP2D6 inhibition</div>
+            <div class="subline">Primary driver · Driven by bupropion</div>
+            <div class="small-note">~65% metabolic contribution</div>
+          </article>
+        </div>
+
+        <div class="interpretation">
+          <div class="kicker" style="margin-bottom: 4px;">What should the clinician consider?</div>
+          Moderate increase in modeled exposure. Enhanced monitoring may be appropriate if adverse effects or tolerability concerns emerge.
+        </div>
+
+        <div class="adjustment">
+          <div>
+            <div class="kicker" style="margin-bottom: 4px;">Optional adjustment</div>
+            <h3>Exposure-Equivalent Dose (PK-Modeled)</h3>
+            <div class="dose-line">Paroxetine 24.8 mg → ≈ 16.7 mg</div>
+            <div class="helper">Exposure-adjusted estimate; not a prescribing directive.</div>
+            <div class="small-note">Mechanism-based steady-state estimate</div>
+          </div>
+          <button class="secondary-btn">Open dose simulator</button>
+        </div>
+
+        <div class="metrics-row">
+          <button class="metric-pill" type="button">
+            <div class="label">Interaction Complexity Index</div>
+            <div class="value">Mild</div>
+          </button>
+          <button class="metric-pill" type="button">
+            <div class="label">STRiC</div>
+            <div class="value moderate">Moderate</div>
+          </button>
+          <button class="metric-pill" type="button">
+            <div class="label">QT Prolongation Potential</div>
+            <div class="value">Minimal</div>
+          </button>
+          <button class="metric-pill" type="button">
+            <div class="label">Cumulative Anticholinergic Load</div>
+            <div class="value">Mild</div>
+          </button>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Medication-Level Exposure Shifts</h3>
+          <div class="bar-row">
+            <span>Bupropion</span>
+            <div class="bar-track"><div class="bar-fill" style="width: 67.5%;"></div></div>
+            <strong>100%</strong>
+          </div>
+          <div class="bar-row">
+            <span>Paroxetine</span>
+            <div class="bar-track"><div class="bar-fill amber" style="width: 100%;"></div></div>
+            <strong>148%</strong>
+          </div>
+          <table class="mechanism-table" aria-label="Mechanistic breakdown">
+            <thead>
+              <tr>
+                <th>Pathway</th>
+                <th>Contribution</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>CYP2D6</td>
+                <td>65%</td>
+                <td>Inhibited</td>
+              </tr>
+              <tr>
+                <td>CYP3A4</td>
+                <td>25%</td>
+                <td>Unaffected</td>
+              </tr>
+              <tr>
+                <td>Other / Invariant</td>
+                <td>10%</td>
+                <td>Preserved baseline</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="card">
+          <h3>Drug-Level Exposure Impact</h3>
+          <div class="impact-list">
+            <div class="impact-item highlight">
+              <div>
+                <strong>Paroxetine</strong>
+                <div class="small-note">Victim</div>
+              </div>
+              <div style="text-align: right;">
+                <strong style="font-size: 18px; color: #9a3412;">↑ +48%</strong>
+                <div class="small-note">148% · ≈36.7 mg exposure-equivalent</div>
+              </div>
+            </div>
+            <div class="impact-item">
+              <div>
+                <strong>Bupropion</strong>
+                <div class="small-note">Perpetrator</div>
+              </div>
+              <span class="tag">Mechanism driver</span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="card">
+          <h3>Dose Comparison for Chart Documentation</h3>
+          <div class="impact-item highlight">
+            <div>
+              <strong>Entered Dose</strong>
+              <div class="small-note">Paroxetine baseline</div>
+            </div>
+            <strong>24.8 mg</strong>
+          </div>
+          <div class="impact-item" style="margin-top: 8px;">
+            <div>
+              <strong>Exposure-Equivalent Dose (PK-Modeled)</strong>
+              <div class="small-note">Optional estimate</div>
+            </div>
+            <strong>≈ 16.7 mg</strong>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Interaction Complexity Index</h3>
+          <div class="score">16<span style="font-size:16px; font-weight:700; color:#64748b;">/100</span></div>
+          <span class="tier mild">Mild</span>
+          <div class="small-note" style="margin-top: 8px;">Complexity-weighted interaction burden remains limited.</div>
+        </article>
+      </section>
+
+      <section class="panel-grid">
+        <article class="card">
+          <h3>STRiC</h3>
+          <div class="score">46</div>
+          <span class="tier moderate">Moderate</span>
+        </article>
+
+        <article class="card">
+          <h3>QT Prolongation Potential</h3>
+          <div class="score" style="font-size: 26px;">Minimal</div>
+          <span class="tier minimal">Minimal</span>
+        </article>
+
+        <article class="card">
+          <h3>Cumulative Anticholinergic Load</h3>
+          <div class="score">1</div>
+          <span class="tier mild">Mild</span>
+        </article>
+
+        <article class="card">
+          <h3>Case Snapshot</h3>
+          <div class="small-note">Victim drug: <strong>Paroxetine</strong> (24.8 mg)</div>
+          <div class="small-note" style="margin-top:6px;">Perpetrator: <strong>Bupropion</strong> (149.9 mg)</div>
+          <div class="small-note" style="margin-top:6px;">Severity tier: <strong>Moderate</strong></div>
+          <div class="small-note" style="margin-top:6px;">Primary pathway impact: <strong>CYP2D6</strong></div>
+        </article>
+      </section>
+
+      <footer class="footer-note">
+        CYPnosis provides mechanism-based pharmacokinetic and pharmacodynamic modeling derived from regulatory labeling and peer-reviewed literature. Outputs represent exposure-equivalent estimates and pharmacologic burden indices. They are intended to inform, not replace, clinical judgment.
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
